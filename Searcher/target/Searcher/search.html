@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/search.css">
+</head>
+
+<body>
+    <div class="contain">
+        <div class="search">
+
+            <input type="text" class="text">
+            <input type="submit" class="submit">
+
+        </div>
+    </div>
+    <div class="disaplay">
+        <!-- <div class="result">
+                <div class="title">
+                    123124
+                </div>
+                <div class="url">
+                    <a>3123432</a>
+                </div>
+                <div class="desc">
+                    31235343434343434343434343434343434343434343434343434343434343434343434343434343434
+                    31235343434343434343434343434343434343434343434343434343434343434343434343434343434
+                    31235343434343434343434343434343434343434343434343434343434343434343434343434343434
+                </div>
+            </div>
+            
+            <div class="top">
+                用于间距离
+            </div> -->
+
+    </div>
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+        
+    <script>
+        function submit() {
+            //提交前把原先页面显示内容删除
+            let dis = document.querySelector(".disaplay");
+            let text = document.querySelector(".text");
+            let query = text.value;
+            dis.innerHTML = "";
+            $.ajax({
+                method: "GET",
+                url: "search?query=" + query,
+                success: function (body) {
+                    for (let data of body) {
+
+                        //创建result
+                        console.log("body");
+                        let resdiv = document.createElement('div');
+                        resdiv.className = 'result';
+                        //1.构造title
+                        let titlediv = document.createElement('div');
+                        titlediv.className = 'title';
+                        titlediv.innerHTML = data.title;
+                        resdiv.appendChild(titlediv);
+                        //2.构造url
+                        let urldiv = document.createElement('div');
+                        let a = document.createElement('a')
+                        urldiv.className = 'url';
+                        a.href = data.url;
+                        a.innerHTML = data.url;
+                        urldiv.appendChild(a);
+                        resdiv.appendChild(urldiv);
+                        //3.构造desc
+                        let descdiv = document.createElement('div');
+                        descdiv.className = 'desc';
+                        descdiv.innerHTML = data.desc;
+                        resdiv.appendChild(descdiv);
+                        dis.appendChild(resdiv);
+                        let topdiv = document.createElement('div');
+                        topdiv.className = 'top';
+                        dis.appendChild(topdiv);
+
+                    }
+                }
+
+
+            })
+        }
+        let sub = document.querySelector('.submit');
+        sub.onclick = submit;
+    </script>
+</body>
+
+</html>

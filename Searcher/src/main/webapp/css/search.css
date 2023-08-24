@@ -1,0 +1,72 @@
+* {
+    border: 0px;
+    margin: 0px;
+    box-sizing: border-box;
+}
+html, body{
+    height: 100%;
+    background-image: url(../img/bk5.jpeg);
+    
+   
+    background-repeat: repeat-y;
+    background-size: cover;
+    background-position: center center;
+}
+.contain{
+    
+}
+.search {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.text {
+  
+    width: 600px;
+    height: 40px;
+    border-radius: 10px;
+    margin: 200px 0px;
+    font-size: 20px;
+    
+}
+
+.submit {
+    height: 40px;
+    width: 130px;
+    border-radius: 10px;
+    background-color: rgb(78,110,242);
+}
+.submit:active{
+    background-color: brown;
+}
+.disaplay{
+    width: 100%;
+   
+
+   
+}
+.title{
+ 
+    font-size: 25px;
+    font-weight: 800;
+    color: brown;
+    text-align: center;
+}
+.url {
+    text-align: center;
+    color: whitesmoke;
+}
+.top{
+    height: 10px;
+    width: 10px;
+    margin: 30px;
+}
+.desc{
+    color: aliceblue;
+    text-indent: 2em;
+    text-align: center;
+}
+i{
+    color: red;
+}
