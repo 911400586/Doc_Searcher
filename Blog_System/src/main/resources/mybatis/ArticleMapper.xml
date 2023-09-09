@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.blog_system.Mapper.ArticleMapper">
+    <insert id="add">
+        insert into articleinfo(title,content,uid) values(#{title},#{content},#{uid})
+    </insert>
+    <select id="getArticleById" resultType="com.example.blog_system.Model.Article">
+        select * from articleinfo where id=#{id} and uid=#{uid}
+    </select>
+    <update id="updateById">
+        update articleinfo set title=#{title}, content=#{content}, updatetime=#{updatetime} where id=#{id}
+    </update>
+    <select id="getArticle" resultType="com.example.blog_system.Model.Vo.ArticleVo">
+        select a.*,u.username from articleinfo a
+        left join userinfo u on u.id=a.uid where a.id=#{id}
+    </select>
+    <update id="count">
+        update articleinfo set rcount=rcount+1
+    </update>
+    <select id="getArticleByUid" resultType="com.example.blog_system.Model.Article">
+        select * from articleinfo where uid=#{uid}
+    </select>
+    <select id="getListByPage" resultType="com.example.blog_system.Model.Article">
+        select * from articleinfo
+        order by createtime desc
+        limit #{pageSize} offset #{offset}
+    </select>
+    <select id="getcount" resultType="int">
+        select count(*) from articleinfo
+    </select>
+    <delete id="del">
+        delete from articleinfo where id=#{id} and uid=#{uid}
+
+    </delete>
+</mapper>
