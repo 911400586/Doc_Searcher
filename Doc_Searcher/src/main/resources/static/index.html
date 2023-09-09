@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Java 文档搜索</title>
+</head>
+<body>
+
+<!-- 通过 .container 来表示整个页面元素的容器 -->
+<div class="container">
+    <!-- 1. 搜索框 + 搜索按钮 -->
+    <div class="header">
+        <input type="text">
+        <button id="search-btn">搜索</button>
+    </div>
+
+    <!-- 2. 显示搜索结果 -->
+    <div class="result">
+        <!-- 包含了很多条记录 -->
+        <!-- 每个 .item 就表示一条记录 -->
+
+        <!-- 接下来要通过访问服务器的方式获取到搜索结果, 并且由 JS 动态生成页面元素 -->
+        <!-- <div class="item">
+            <a href="#">我是标题</a>
+            <div class="desc">我是一段描述. Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quibusdam qui dolor quo tempora dignissimos itaque facilis, accusantium porro sapiente beatae harum soluta ex quos quia eius vero repudiandae voluptatem veniam.</div>
+            <div class="url">http://www.baidu.com</div>
+        </div>
+        <div class="item">
+            <a href="#">我是标题</a>
+            <div class="desc">我是一段描述. Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quibusdam qui dolor quo tempora dignissimos itaque facilis, accusantium porro sapiente beatae harum soluta ex quos quia eius vero repudiandae voluptatem veniam.</div>
+            <div class="url">http://www.baidu.com</div>
+        </div>
+        <div class="item">
+            <a href="#">我是标题</a>
+            <div class="desc">我是一段描述. Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quibusdam qui dolor quo tempora dignissimos itaque facilis, accusantium porro sapiente beatae harum soluta ex quos quia eius vero repudiandae voluptatem veniam.</div>
+            <div class="url">http://www.baidu.com</div>
+        </div>
+        <div class="item">
+            <a href="#">我是标题</a>
+            <div class="desc">我是一段描述. Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quibusdam qui dolor quo tempora dignissimos itaque facilis, accusantium porro sapiente beatae harum soluta ex quos quia eius vero repudiandae voluptatem veniam.</div>
+            <div class="url">http://www.baidu.com</div>
+        </div> -->
+    </div>
+</div>
+
+<style>
+    /* 这部分代码来写样式 */
+    /* 先去掉浏览器的默认样式 */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    /* 给整体的页面指定一个高度(和浏览器窗口一样高) */
+    html, body {
+        height: 100%;
+        /* 设置背景图 */
+        background-image: url(image/cat.jpg);
+        /* 设置背景图不平铺 */
+        background-repeat: no-repeat;
+        /* 设置背景图的位置 */
+        background-position: center center;
+        /* 设置背景图的大小 */
+        background-size: cover;
+    }
+
+    /* 针对 .container 也设置样式, 实现版心效果 */
+    .container {
+        /* 此处的宽度也可以设置成百分数的形式, 当前就使用一个固定宽度 */
+        width: 1200px;
+        height: 100%;
+        /* 设置水平居中 */
+        margin: 0 auto;
+        /* 设置背景色, 让版心和背景图能够区分开 */
+        background-color: rgba(255, 255, 255, 0.8);
+        /* 设置圆角矩形 */
+        border-radius: 10px;
+        /* 设置内边距, 避免文字内容紧贴着边界 */
+        padding: 20px;
+
+        /* 加上这个属性, 超出元素的部分就会自动生成一个滚动条. */
+        overflow: auto;
+    }
+
+    .header {
+        width: 100%;
+        height: 50px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .header>input {
+        width: 1050px;
+        height: 50px;
+        font-size: 22px;
+        line-height: 50px;
+        padding-left: 10px;
+        border-radius: 10px;
+    }
+
+    .header>button {
+        width: 100px;
+        height: 50px;
+        background-color: rgb(42,107,205);
+        color: #fff;
+        font-size: 22px;
+        line-height: 50px;
+        border-radius: 10px;
+        border: none;
+    }
+
+    .header>button:active {
+        background: gray;
+    }
+
+    .result .count {
+        color: gray;
+        margin-top: 10px;
+    }
+
+    .item {
+        width: 100%;
+        margin-top: 20px;
+    }
+
+    .item a {
+        display: block;
+        height: 40px;
+
+        font-size: 22px;
+        line-height: 40px;
+        font-weight: 700;
+
+        color: rgb(42,107,205);
+    }
+
+    .item .desc {
+        font-size: 18px;
+    }
+
+    .item .url {
+        font-size: 18px;
+        color: rgb(0, 128, 0);
+    }
+
+    .item .desc i {
+        color: red;
+        /* 去掉斜体 */
+        font-style: normal;
+    }
+</style>
+
+<script src="js/jquery.js"></script>
+
+<script>
+    // 放置用户自己写的 js 代码
+    let button = document.querySelector("#search-btn");
+    button.onclick = function() {
+        //冻结按钮
+
+        jQuery("#search-btn").prop("disabled", true);
+        // 先获取到输入框的内容
+        let input = document.querySelector(".header input");
+        let query = input.value;
+        // 然后构造一个 ajax 请求发给服务器
+
+        $.ajax({
+            type: "GET",
+            url: "searcher?query=" + query,
+            success: function(data, status) {
+                // success 这个函数会在请求成功后调用.
+                // data 参数就表示拿到的结果数据
+                // status 参数就表示 HTTP 状态码
+                // 根据收到的数据结果, 构造出页面内容.
+                // console.log(data);
+                buildResult(data);
+                //解冻按钮
+                jQuery("#search-btn").prop("disabled", false);
+            }
+        })
+    }
+
+    function buildResult(data) {
+        // 通过这个函数, 来把响应数据给构造成页面内容.
+        // 要做的工作就是, 遍历 data 中的每个元素,
+        // 针对每个元素都创建一个 div.item, 然后把标题, url, 描述都构造好
+        // 再把这个 div.item 给加入到 div.result 中
+        // 这些操作都是基于 DOM API 来展开~
+
+        // 获取到 .result 这个标签
+        let result = document.querySelector('.result');
+        // 清空上次的结果.
+        result.innerHTML = '';
+
+        // 先构造一个 div 用来显示结果的个数
+        let countDiv = document.createElement('div');
+        countDiv.innerHTML = '当前找到 ' + data.length + '个结果!';
+        countDiv.className = 'count';
+        result.appendChild(countDiv);
+
+        // 这就相当于 java 中的 for each
+        // 此处得到的 item 就会分别代表 data 中的每个元素
+        for (let item of data) {
+            let itemDiv = document.createElement('div');
+            itemDiv.className = 'item';
+
+            // 构造一个标题
+            let title = document.createElement('a');
+            title.href = item.url;
+            title.innerHTML = item.title;
+            title.target = '_blank';
+            itemDiv.appendChild(title);
+
+            // 构造一个描述
+            let desc = document.createElement('div');
+            desc.className = 'desc';
+            desc.innerHTML = item.desc;
+            itemDiv.appendChild(desc);
+
+            // 构造一个 url
+            let url = document.createElement('div');
+            url.className = 'url';
+            url.innerHTML = item.url;
+            itemDiv.appendChild(url);
+
+            // 把 itemDiv 加到 .result 中
+            result.appendChild(itemDiv);
+        }
+    }
+
+</script>
+</body>
+</html>
